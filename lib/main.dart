@@ -19,7 +19,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
   HttpOverrides.global = MyHttpOverrides();
-  await SharedPreferencesHelper.init();
   bootstrap(() => const MyApp());
 }
 
@@ -32,6 +31,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => LoginCubit(
             loginRepo: serviceLocator<LoginRepoImb>(),
+            sharedPreferencesHelper: serviceLocator<SharedPreferencesHelper>(),
           ),
         ),
         BlocProvider(

@@ -11,37 +11,43 @@ import 'package:progress_state_button/progress_button.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  late final LoginRepo _loginRepo;
-  LoginCubit({required LoginRepo loginRepo})
-      : _loginRepo = loginRepo,
+  final LoginRepo _loginRepo;
+  final SharedPreferencesHelper _sharedPreferencesHelper;
+
+  LoginCubit({
+    required LoginRepo loginRepo,
+    required SharedPreferencesHelper sharedPreferencesHelper,
+  })  : _loginRepo = loginRepo,
+        _sharedPreferencesHelper = sharedPreferencesHelper,
         super(const LoginInitial(buttonState: ButtonState.idle));
 
   static LoginCubit get(BuildContext context) => BlocProvider.of(context);
 
   late UserData userData;
-  Map<String, dynamic> loginCredentials = {'expiresInMins': 30};
+  final Map<String, dynamic> loginCredentials = {'expiresInMins': 30};
 
-  login() async {
+  Future<void> login() async {
     emit(const LoginLoading(buttonState: ButtonState.loading));
     try {
       final response = await _loginRepo.login(loginCredentials);
       response.fold(
-          (l) => emit(
-              LoginFailed(buttonState: ButtonState.fail, errorMessages: l)),
-          (r) async {
-        userData = r.data;
-        await SharedPreferencesHelper.setToken(r.data.token);
-        await SharedPreferencesHelper.init();
-        inspect(userData);
-        emit(LoginSuccesfully(
-            buttonState: ButtonState.success, userData: r.data));
-      });
-    } catch (e) {
+        (failure) => emit(
+          LoginFailed(buttonState: ButtonState.fail, errorMessages: failure),
+        ),
+        (success) async {
+          userData = success.data;
+          await _sharedPreferencesHelper.setToken(success.data.token);
+          await _sharedPreferencesHelper.init();
+          emit(LoginSuccesfully(
+              buttonState: ButtonState.success, userData: success.data));
+        },
+      );
+    } catch (error) {
       emit(const LoginFailed(buttonState: ButtonState.fail));
     }
   }
 
-  init() {
+  void init() {
     emit(const LoginInitial(buttonState: ButtonState.idle));
   }
 }

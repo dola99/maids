@@ -84,19 +84,7 @@ class TodoListScreen extends StatelessWidget {
               return AlertDialog(
                 title: const Text('Add New Todo'),
                 content: CustomTextFormField(
-                  params: CustomTextFormFieldParams(controller: todoController
-
-                      // onFieldSubmitted: (va) {
-                      //   _passwordFocusNode.requestFocus();
-                      // },
-                      // validator: (value) {
-                      //   return ValidatorHelper.validateUserName(value);
-                      // },
-                      // onSaved: (value) {
-                      //   LoginCubit.get(context).loginCredentials['username'] =
-                      //       value;
-                      // },
-                      ),
+                  params: CustomTextFormFieldParams(controller: todoController),
                 ),
                 actions: [
                   TextButton(

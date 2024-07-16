@@ -26,7 +26,7 @@ class TodoListScreenAppbar extends StatelessWidget
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        UserData.getInstance().userName,
+                        UserData.getInstance().username,
                         style: const TextStyle(color: Colors.black),
                       ),
                       Text(
@@ -52,7 +52,7 @@ class TodoListScreenAppbar extends StatelessWidget
               ),
               IconButton(
                   onPressed: () async {
-                    await SharedPreferencesHelper.clearToken();
+                    // await SharedPreferencesHelper.clearToken();
                     LoginCubit.get(context).init();
                     Navigator.of(context).pushReplacement(CupertinoPageRoute(
                       builder: (context) => const LoginScreen(),

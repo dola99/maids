@@ -28,4 +28,13 @@ class ListResponse<T> extends GenericResponse<List<T>> {
           .toList(),
     );
   }
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is GenericResponse<T> && other.data == data;
+  }
+
+  @override
+  int get hashCode => data.hashCode;
 }

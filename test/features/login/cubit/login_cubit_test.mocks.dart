@@ -6,11 +6,13 @@
 import 'dart:async' as _i5;
 
 import 'package:dartz/dartz.dart' as _i3;
+import 'package:maids_task/core/helpers/secure_sharedprefernce.dart' as _i8;
 import 'package:maids_task/core/network/generic_model.dart' as _i6;
 import 'package:maids_task/core/network/network_layer.dart' as _i2;
 import 'package:maids_task/features/login/repo/login_repo.dart' as _i4;
 import 'package:maids_task/Model/user_data.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:shared_preferences/shared_preferences.dart' as _i9;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -81,4 +83,54 @@ class MockLoginRepo extends _i1.Mock implements _i4.LoginRepo {
           ),
         )),
       ) as _i5.Future<_i3.Either<String, _i6.GenericResponse<_i7.UserData>>>);
+}
+
+/// A class which mocks [SharedPreferencesHelper].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSharedPreferencesHelper extends _i1.Mock
+    implements _i8.SharedPreferencesHelper {
+  MockSharedPreferencesHelper() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<void> init({_i9.SharedPreferences? sharedPreferences}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #init,
+          [],
+          {#sharedPreferences: sharedPreferences},
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<bool> setToken(String? token) => (super.noSuchMethod(
+        Invocation.method(
+          #setToken,
+          [token],
+        ),
+        returnValue: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
+
+  @override
+  _i5.Future<String?> getToken() => (super.noSuchMethod(
+        Invocation.method(
+          #getToken,
+          [],
+        ),
+        returnValue: _i5.Future<String?>.value(),
+      ) as _i5.Future<String?>);
+
+  @override
+  _i5.Future<void> clearToken() => (super.noSuchMethod(
+        Invocation.method(
+          #clearToken,
+          [],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }

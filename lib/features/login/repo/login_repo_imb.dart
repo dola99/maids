@@ -16,16 +16,19 @@ class LoginRepoImb extends LoginRepo {
       Map<String, dynamic> logincredentials) async {
     final response = await networkService.postRequest(
         ServicesUrl.loginApi, logincredentials);
-    inspect(response);
-    if (response['error'] != null) {
-      return Left(response['error']['message']);
-    } else {
-      return Right(GenericResponse<UserData>.fromJson(
-          response, (map) => UserData.fromJson(map)));
+    try {
+      if (response['error'] != null) {
+        return Left(response['error']['message']);
+      } else {
+        return Right(GenericResponse<UserData>.fromJson(
+            response, (map) => UserData.fromJson(map)));
+      }
+      // return Response<String>.fromJson(
+      //   jsonResponse,
+      //   (itemJson) => MerchantItem.fromJson(itemJson),
+      // );
+    } catch (e) {
+      return Left(e.toString());
     }
-    // return Response<String>.fromJson(
-    //   jsonResponse,
-    //   (itemJson) => MerchantItem.fromJson(itemJson),
-    // );
   }
 }

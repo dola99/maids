@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:maids_task/core/helpers/secure_sharedprefernce.dart';
 import 'package:maids_task/core/network/generic_model.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -8,18 +9,31 @@ import 'package:maids_task/Model/user_data.dart';
 import 'package:maids_task/features/login/cubit/login_cubit.dart';
 import 'package:maids_task/features/login/repo/login_repo.dart';
 import 'package:progress_state_button/progress_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// Generate a MockLoginRepo
-@GenerateMocks([LoginRepo])
+@GenerateMocks([LoginRepo, SharedPreferencesHelper])
 import 'login_cubit_test.mocks.dart';
+
+class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 void main() {
   late MockLoginRepo mockLoginRepo;
+  late MockSharedPreferencesHelper mockSharedPreferencesHelper;
   late LoginCubit loginCubit;
 
-  setUp(() {
+  setUp(() async {
     mockLoginRepo = MockLoginRepo();
-    loginCubit = LoginCubit(loginRepo: mockLoginRepo);
+    mockSharedPreferencesHelper = MockSharedPreferencesHelper();
+
+    when(mockSharedPreferencesHelper.setToken(any))
+        .thenAnswer((_) async => Future.value(true));
+    when(mockSharedPreferencesHelper.init())
+        .thenAnswer((_) async => Future.value());
+
+    loginCubit = LoginCubit(
+      loginRepo: mockLoginRepo,
+      sharedPreferencesHelper: mockSharedPreferencesHelper,
+    );
   });
 
   group('LoginCubit', () {
@@ -53,7 +67,7 @@ void main() {
       'emits [LoginLoading, LoginFailed] when login fails',
       build: () {
         when(mockLoginRepo.login(any))
-            .thenAnswer((_) async => Left('Login Failed'));
+            .thenAnswer((_) async => const Left('Login Failed'));
         return loginCubit;
       },
       act: (cubit) => cubit.login(),
