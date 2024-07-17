@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,7 +35,6 @@ class LoginCubit extends Cubit<LoginState> {
         (success) async {
           userData = success.data;
           await _sharedPreferencesHelper.setToken(success.data.token);
-          await _sharedPreferencesHelper.init();
           emit(LoginSuccesfully(
               buttonState: ButtonState.success, userData: success.data));
         },

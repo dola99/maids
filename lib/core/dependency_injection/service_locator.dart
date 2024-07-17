@@ -14,7 +14,6 @@ void setupServiceLocator() {
 
   serviceLocator.registerLazySingleton(
       () => LoginRepoImb(networkService: serviceLocator<NetworkService>()));
-
   serviceLocator.registerLazySingleton(
       () => TodoRepoImb(networkService: serviceLocator<NetworkService>()));
 }

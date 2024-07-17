@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:maids_task/Model/user_data.dart';
 import 'package:maids_task/core/network/generic_model.dart';
 import 'package:maids_task/core/network/network_layer.dart';
@@ -23,10 +21,6 @@ class LoginRepoImb extends LoginRepo {
         return Right(GenericResponse<UserData>.fromJson(
             response, (map) => UserData.fromJson(map)));
       }
-      // return Response<String>.fromJson(
-      //   jsonResponse,
-      //   (itemJson) => MerchantItem.fromJson(itemJson),
-      // );
     } catch (e) {
       return Left(e.toString());
     }

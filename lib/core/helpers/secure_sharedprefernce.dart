@@ -4,10 +4,7 @@ class SharedPreferencesHelper {
   late SharedPreferences _prefs;
   static const String _tokenKey = 'token';
 
-  SharedPreferencesHelper({SharedPreferences? sharedPreferences}) {
-    _prefs = sharedPreferences ??
-        SharedPreferences.getInstance() as SharedPreferences;
-  }
+  SharedPreferencesHelper({SharedPreferences? sharedPreferences});
 
   Future<void> init({SharedPreferences? sharedPreferences}) async {
     _prefs = sharedPreferences ?? await SharedPreferences.getInstance();

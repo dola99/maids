@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:maids_task/core/network/service_urls.dart';
 import 'package:maids_task/features/login/repo/login_repo_imb.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
