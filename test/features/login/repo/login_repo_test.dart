@@ -11,8 +11,6 @@ import 'login_repo_test.mocks.dart';
 
 // Generate mock classes
 @GenerateMocks([NetworkService])
-import 'login_repo_test.mocks.dart';
-
 void main() {
   late MockNetworkService mockNetworkService;
   late LoginRepoImb loginRepoImb;
@@ -24,17 +22,6 @@ void main() {
 
   group('LoginRepo', () {
     final loginCredentials = {'username': 'testuser', 'password': 'testpass'};
-    final userData = UserData.fromJson({
-      'id': 1,
-      'firstName': 'John',
-      'lastName': 'Doe',
-      'email': 'john.doe@example.com',
-      'username': 'johndoe',
-      'gender': 'male',
-      'image': 'https://example.com/image.jpg',
-      'token': 'token123',
-      'refreshToken': 'refreshToken123',
-    });
 
     test(
       'returns Right with GenericResponse<UserData> when login is successful',
