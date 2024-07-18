@@ -45,10 +45,10 @@ class TodoRepoImb extends TodoRepository {
   }
 
   @override
-  Future<Either<String, void>> deleteTodo(int id) async {
+  Future<Either<String, bool>> deleteTodo(int id) async {
     try {
       await networkService.deleteRequest('${ServicesUrl.todosApi}/$id');
-      return const Right(null);
+      return const Right(true);
     } catch (e) {
       return Left('Failed to delete todo: $e');
     }

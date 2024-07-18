@@ -5,7 +5,10 @@ import 'package:http/http.dart' as http;
 
 class NetworkService {
   final String baseUrl;
-  NetworkService({required this.baseUrl});
+  final http.Client client;
+
+  NetworkService({required this.baseUrl, http.Client? client})
+      : client = client ?? http.Client();
 
   final Map<String, String> headers = {
     "Content-Type": "application/json",
@@ -44,7 +47,7 @@ class NetworkService {
       switch (method) {
         case 'GET':
           log('Get Request ==> $uri', name: 'Get Request');
-          response = await http
+          response = await client
               .get(
                 uri,
                 headers: headers,
@@ -54,7 +57,7 @@ class NetworkService {
           break;
         case 'POST':
           log('Post Request ==> $uri', name: 'Post Request');
-          response = await http
+          response = await client
               .post(uri, body: jsonEncode(body), headers: headers)
               .timeout(const Duration(seconds: 10));
           log('Post Response  ==> ${response.body} /n Request Body : ${jsonEncode(body)}',
@@ -62,14 +65,14 @@ class NetworkService {
           break;
         case 'PUT':
           log('Put Request ==> $uri', name: 'Put Request');
-          response = await http
+          response = await client
               .put(uri, body: jsonEncode(body), headers: headers)
               .timeout(const Duration(seconds: 10));
           log('put Response  ==> ${response.body} /n', name: 'put Response');
           break;
         case 'DELETE':
           log('Delete Request ==> $uri', name: 'Delete Request');
-          response = await http
+          response = await client
               .delete(uri, headers: headers)
               .timeout(const Duration(seconds: 10));
           log('Delete Response  ==> ${response.body} /n',

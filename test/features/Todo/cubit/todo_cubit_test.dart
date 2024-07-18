@@ -23,12 +23,18 @@ void main() {
     tearDown(() {
       todoBloc.close();
     });
-    final todo = Todo(todo: 'Hello', completed: true, userId: 12);
+
+    final todo = Todo(
+      todo: 'Hello',
+      completed: true,
+      userId: 12,
+    );
+
     blocTest<TodoBloc, TodoState>(
       'emits [TodoLoading, TodoLoaded] when LoadTodos is added',
       build: () {
         when(mockTodoRepository.fetchTodos()).thenAnswer(
-          (_) async => const Right([]), // Adjust to match your model
+          (_) async => const Right(<Todo>[]),
         );
         return todoBloc;
       },
@@ -43,7 +49,7 @@ void main() {
       'emits [TodoLoading, TodoError] when LoadTodos fails',
       build: () {
         when(mockTodoRepository.fetchTodos()).thenAnswer(
-          (_) async => Left('Failure'), // Adjust to match your model
+          (_) async => Left('Failure'),
         );
         return todoBloc;
       },
@@ -54,41 +60,53 @@ void main() {
       ],
     );
 
-    // blocTest<TodoBloc, TodoState>(
-    //   'emits [TodoLoaded] when AddTodo is successful',
-    //   build: () {
-    //     when(mockTodoRepository
-    //             .addTodo(todo)
-    //         .thenAnswer(
-    //       (_) async => Right(todo), // Adjust to match your model
-    //     );
-    //     return todoBloc;
-    //   },
-    //   act: (bloc) => bloc.add(AddTodo(
-    //     todo: MockTodo(), // Adjust to match your model
-    //     todoList: [],
-    //   )),
-    //   expect: () => [
-    //     isA<TodoLoaded>(),
-    //   ],
-    // );
+    blocTest<TodoBloc, TodoState>(
+      'emits [TodoLoadingMore, TodoLoaded] when LoadMoreTodos is added',
+      build: () {
+        when(mockTodoRepository.fetchTodos()).thenAnswer(
+          (_) async => Right(<Todo>[]),
+        );
+        todoBloc.emit(TodoLoaded(<Todo>[], hasReachedMax: false));
+        return todoBloc;
+      },
+      act: (bloc) => bloc.add(LoadMoreTodos(10)),
+      expect: () => [
+        TodoLoadingMore(<Todo>[]),
+        isA<TodoLoaded>(),
+      ],
+    );
 
-    // blocTest<TodoBloc, TodoState>(
-    //   'emits [TodoError] when AddTodo fails',
-    //   build: () {
-    //     when(mockTodoRepository.addTodo(any)).thenAnswer(
-    //       (_) async => Left(MockFailure()), // Adjust to match your model
-    //     );
-    //     return todoBloc;
-    //   },
-    //   act: (bloc) => bloc.add(AddTodo(
-    //     todo: MockTodo(), // Adjust to match your model
-    //     todoList: [],
-    //   )),
-    //   expect: () => [
-    //     isA<TodoError>(),
-    //   ],
-    // );
+    blocTest<TodoBloc, TodoState>(
+      'emits [TodoLoaded] when AddTodo is successful',
+      build: () {
+        when(mockTodoRepository.addTodo(
+          todo,
+        )).thenAnswer(
+          (_) async => Right(todo),
+        );
+        return todoBloc;
+      },
+      act: (bloc) => bloc.add(AddTodo(todo, [])),
+      expect: () => [
+        isA<TodoLoaded>(),
+      ],
+    );
+
+    blocTest<TodoBloc, TodoState>(
+      'emits [TodoError] when AddTodo fails',
+      build: () {
+        when(mockTodoRepository
+                .addTodo(Todo(todo: 'todo', completed: true, userId: 11)))
+            .thenAnswer(
+          (_) async => Left('Failure'),
+        );
+        return todoBloc;
+      },
+      act: (bloc) => bloc.add(AddTodo(todo, [])),
+      expect: () => [
+        isA<TodoError>(),
+      ],
+    );
 
     // Repeat similar tests for DeleteTodo and UpdateTodo events
   });
