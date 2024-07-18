@@ -25,8 +25,8 @@ This document provides guidelines for setting up and testing the `LoginCubit` an
 Clone the repository and navigate to the project directory:
 
 ```bash
-git clone <repository-url>
-cd <project-directory>
+git clone https://github.com/dola99/maids.git
+cd maids
 ```
 
 Install the dependencies:
